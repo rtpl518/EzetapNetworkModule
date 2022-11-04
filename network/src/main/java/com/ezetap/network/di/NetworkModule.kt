@@ -1,4 +1,4 @@
-package com.ezetap.network.hilt.di
+package com.ezetap.network.di
 
 import android.content.Context
 import com.ezetap.network.BuildConfig
@@ -20,17 +20,17 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+object ApiModule {
 
     @Provides
     @Singleton
-    fun providesNetworkInterceptor(@ApplicationContext context: Context) =
+    fun providesNetworkInterceptor(@ApplicationContext context: Context): InterceptorNetworkConnection =
         InterceptorNetworkConnection(context)
 
     @Provides
     @Singleton
-    fun providesOkHttpClient(interceptor: InterceptorNetworkConnection) =
-        OkHttpClient.Builder().apply {
+    fun providesOkHttpClient(interceptor: InterceptorNetworkConnection): OkHttpClient =
+        with(OkHttpClient.Builder()) {
             addInterceptor(interceptor)
             if (BuildConfig.DEBUG) {
                 addInterceptor(HttpLoggingInterceptor().apply {
@@ -41,7 +41,8 @@ object NetworkModule {
             writeTimeout(Constants.API_CONNECT_TIMEOUT, TimeUnit.SECONDS)
             readTimeout(Constants.API_CONNECT_TIMEOUT, TimeUnit.SECONDS)
             callTimeout(Constants.API_CONNECT_TIMEOUT, TimeUnit.SECONDS)
-        }.build()
+            build()
+        }
 
     @Provides
     @Singleton

@@ -5,8 +5,14 @@ import com.ezetap.network.data.*
 import com.google.gson.Gson
 import javax.inject.Inject
 
+/**
+* Class responsible to make the requests.
+* */
 class RequestManager @Inject constructor(private val apiService: ApiService) {
 
+    /**
+    * Request to get the UI data.
+    * */
     suspend fun fetchCustomUI(): ResponseModel<Any> {
         with(NetworkRouter.invokeApiCall { apiService.fetchCustomUI() }) {
             return when (this) {
@@ -21,6 +27,9 @@ class RequestManager @Inject constructor(private val apiService: ApiService) {
         }
     }
 
+    /**
+    * Request to get the image URL.
+    * */
     suspend fun fetchImage(): ResponseModel<Any> {
         with(NetworkRouter.invokeApiCall { apiService.fetchImage() }) {
             return when (this) {
